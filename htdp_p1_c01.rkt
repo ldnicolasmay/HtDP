@@ -119,5 +119,66 @@
 (overlay/align "middle" "middle"
                (rectangle 40 40 "solid" "blue")
                (rectangle 50 50 "solid" "red"))
+(empty-scene 100 60)
+(place-image (rectangle 50 30 "solid" "black") 30 15 (empty-scene 100 60))
+(scene+line (empty-scene 100 60) 10 10 90 50 "red")
+(scene+line (place-image (rectangle 50 30 "solid" "black")
+                         30 15
+                         (empty-scene 100 60))
+            10 10 90 50 "red")
+
+;;; Exercise 5
+(define (tree s) (overlay/align "middle" "top"
+                                (circle s "solid" "green")
+                                (rectangle (/ s 2) (* s 3) "solid" "brown")))
+(tree 10)
+(tree 20)
+(tree 30)
+(tree 40)
+(overlay/xy (tree 10) 40 0 (tree 20))
 
 
+;; 1.5 The Arithmetic of Booleans
+
+(or #true #true)
+(or #true #false)
+(or #false #false)
+
+(and #true #true)
+(and #true #false)
+
+(not #true)
+
+(or #false #true #false)
+(and #false #true #false)
+
+;;; Exercise 7
+(define sunny #true)
+(define friday #false)
+(or (not sunny) friday)
+
+
+;; 1.6 Mixing It Up with Booleans
+
+; (define xx 0)
+; (define inverse-of-xx (/ 1 xx))
+(define (inverse-of-x x) (if (= x 0) 0 (/ 1 x)))
+(inverse-of-x 2)
+(inverse-of-x 0)
+(inverse-of-x 123)
+
+(> 3 4)
+(<= 3 4)
+
+; for string equality, use (string=? "string1" "string2")
+(string=? "string1" "string2")
+; also there's string<=?
+(string<=? "string1" "string2")
+(string>=? "a" "b")
+
+(define current-color "red")
+(define next-color
+  (if (string=? current-color "green") "yellow"
+      (if (string=? current-color "yellow") "red" "green")))
+current-color
+next-color

@@ -182,3 +182,62 @@
       (if (string=? current-color "yellow") "red" "green")))
 current-color
 next-color
+
+;;; Exercise 8
+(define cat (ellipse 60 40 "solid" "brown"))
+cat
+(if (> (image-width cat) (image-height cat)) "wide" "tall")
+(if (= (image-width cat) (image-height cat)) "square"
+    (if (> (image-width cat) (image-height cat)) "wide" "tall"))
+
+
+;; 1.7 Predicates: Know Thy Data
+
+; A predicate is a function that consumes a value and determines
+; whether or not that value belongs to some class of data.
+
+(number? 4)
+(number? pi)
+(number? #true)
+(number? "fortytwo")
+
+; Predicates can help protect expression from misuse
+
+(define in1 "fortytwo")
+(if (string? in1) (string-length in1) "`in1` not a string")
+
+(number? 12/13)   ; #true
+(number? 3+4i)    ; #true
+(string? "hello") ; #true
+(string? #false)  ; #false
+(image? (circle 30 "outline" "red")) ; #true
+(boolean? #false) ; #true
+
+(integer? 12)     ; #true
+(integer? 12.3)   ; #false
+(rational? 12/13) ; #true
+(rational? 0.1)   ; #true
+(real? 0.1234)    ; #true
+(complex? 3+4i)   ; #true
+(complex? 3)      ; #true; 3+0i
+(complex? (+ e (* e 0+1i))) ; #true
+; suprisingly...
+(rational? pi) ; is #true
+; this is true because BSL uses a finite approximation of pi
+(exact? 12/13)    ; #true
+(exact? (sin (/ pi 2))) ; #false
+(inexact? (sin pi)) ; #true
+
+;;; Exercise 9
+; (define in -9)
+; (define in "blah")
+; (define in (rectangle 40 80 "solid" "green"))
+(define in #false)
+(if (number? in) (abs in)
+    (if (string? in) (string-length in)
+        (if (image? in) (* (image-width in) (image-height in))
+            (if (and (boolean? in) in) 10
+                (if (and (boolean? in) (not in)) 20 "")))))
+
+;;; Exercise 10
+; Now relax, eat, sleep, and then tackle the next chapter.

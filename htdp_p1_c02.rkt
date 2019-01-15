@@ -1,6 +1,7 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-beginner-reader.ss" "lang")((modname htdp_p1_c02) (read-case-sensitive #t) (teachpacks ((lib "image.rkt" "teachpack" "2htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "image.rkt" "teachpack" "2htdp")) #f)))
+
 ; 2 Functions and Programs
 
 ;; 2.1 Functions
@@ -101,19 +102,32 @@
 ;;; Exercise 18
 (define (string-join s1 s2)
   (if (and (string? s1) (string? s2))
-      (string-append s1 "_" s2)
-      "Arguments must both be strings"))
+      (string-append s1 "_" s2)          ; then
+      "Arguments must both be strings")) ; else
 (string-join "" "")
 (string-join "hello" "world")
 
 ;;; Exercise 19
 (define (string-insert s i)
-  (if (and (string? s) (integer? i))
-      (string-append (substring s 0 i) "_" (substring s i))
-      "1st arg must be string and 2nd arg must be integer"))
+  (if (and (string? s) (integer? i) (>= i 0) (<= i (string-length s)))
+      (string-append (substring s 0 i) "_" (substring s i))  ; then
+      "1st arg must be string and 2nd arg must be integer")) ; else
 (string-insert "Nicolas" 4)
+(string-insert "" 0)
 
 ;;; Exercise 20
+(define (string-delete str i)
+  (if (and (string? str)
+           (integer? i)
+           (>= i 0)
+           (< i (string-length str)))
+      (string-append (substring str 0 i) (substring str (add1 i)))    ; then
+      "1st arg must be nonempty string and 2nd art must be integer")) ; else
+(string-delete "Nicolas" 4)
+(string-delete "" 0)
+
+
+;; 2.2 Computing
 
 
 

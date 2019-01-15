@@ -90,14 +90,21 @@
 (image-area gray-rectangle)
 
 ;;; Exercise 17
+; Using (if ...)
+; (define (image-classify i)
+;   (if (image? i)
+;       (if (= (image-width i) (image-height i)) "square"
+;           (if (> (image-width i) (image-height i)) "wide" "tall"))
+;       "Argument must be an image"))
+; Using (cond [...] [...])
 (define (image-classify i)
-  (if (image? i)
-      (if (= (image-width i) (image-height i)) "square"
-          (if (> (image-width i) (image-height i)) "wide" "tall"))
-      "Argument must be an image"))
-(image-classify gray-rectangle)
-(image-classify (square 40 "solid" "black"))
-(image-classify (ellipse 20 80 "outline" "green"))
+  (cond
+    [(> (image-width i) (image-height i)) "wide"  ]
+    [(= (image-width i) (image-height i)) "square"]
+    [(< (image-width i) (image-height i)) "tall"  ]))
+(image-classify gray-rectangle) ; wide
+(image-classify (square 40 "solid" "black")) ; square
+(image-classify (ellipse 20 80 "outline" "green")) ; tall
 
 ;;; Exercise 18
 (define (string-join s1 s2)
@@ -129,7 +136,14 @@
 
 ;; 2.2 Computing
 
+; Look in file htdp_p1_c02_2.rkt for following example using stepper
+; (define (ff a) (* 10 a))
+; (ff (+ 1 1))
 
+;;; Exercises 21 throught 26 -- see htdp_p1_c02_02.rkt
+
+
+;; 2.3 Composing Functions
 
 
 

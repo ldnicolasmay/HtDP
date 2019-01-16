@@ -42,15 +42,15 @@
 
 ;;; Exercise 11
 (define (distance x y) (sqrt (+ (sqr x) (sqr y))))
-(distance 3 4)
-(distance 6 8)
-(distance 12 5)
+; (distance 3 4)
+; (distance 6 8)
+; (distance 12 5)
 
 ;;; Exercise 12
 (define (cvolume s) (expt s 3))
-(cvolume 3)
+; (cvolume 3)
 (define (csurface s) (* (sqr s) 6))
-(csurface 3)
+; (csurface 3)
 
 ;;; Exercise 13
 (define (string-first s)
@@ -59,10 +59,10 @@
           (string-ith s 0)
           "String must not be empty")
       "Argument must be a string")) ; arg is NOT a string
-(string-first "blah")
-(string-first "")
-(string-first 5)
-(string-first #true)
+; (string-first "blah")
+; (string-first "")
+; (string-first 5)
+; (string-first #true)
 
 ;;; Exercise 14
 (define (string-last s)
@@ -71,20 +71,20 @@
           (string-ith s (sub1 (string-length s)))
           "String must not be empty")
       "Argument must be a string")) ; arg is NOT a string
-(string-last "blah")
-(string-last "")
-(string-last 5)
-(string-last #true)
+; (string-last "blah")
+; (string-last "")
+; (string-last 5)
+; (string-last #true)
 
 ;;; Exercise 15
 (define (==> sunny friday)
   (if (and (boolean? sunny) (boolean? friday))
       (and (not sunny) friday)
       "Arguments must both be booleans"))
-(==> #false #true)  ; #true
-(==> #false #false) ; #false
-(==> #true #true)   ; #false
-(==> #true #false)  ; #false
+; (==> #false #true)  ; #true
+; (==> #false #false) ; #false
+; (==> #true #true)   ; #false
+; (==> #true #false)  ; #false
 
 ;;; Exercise 16
 (define (image-area i)
@@ -92,7 +92,7 @@
       (* (image-width i) (image-height i))
       "Argument must be an image"))
 (define gray-rectangle (rectangle 60 15 "solid" "gray"))
-(image-area gray-rectangle)
+; (image-area gray-rectangle)
 
 ;;; Exercise 17
 ; Using (if ...)
@@ -107,25 +107,25 @@
     [(> (image-width i) (image-height i)) "wide"  ]
     [(= (image-width i) (image-height i)) "square"]
     [(< (image-width i) (image-height i)) "tall"  ]))
-(image-classify gray-rectangle) ; wide
-(image-classify (square 40 "solid" "black")) ; square
-(image-classify (ellipse 20 80 "outline" "green")) ; tall
+; (image-classify gray-rectangle) ; wide
+; (image-classify (square 40 "solid" "black")) ; square
+; (image-classify (ellipse 20 80 "outline" "green")) ; tall
 
 ;;; Exercise 18
 (define (string-join s1 s2)
   (if (and (string? s1) (string? s2))
       (string-append s1 "_" s2)          ; then
       "Arguments must both be strings")) ; else
-(string-join "" "")
-(string-join "hello" "world")
+; (string-join "" "")
+; (string-join "hello" "world")
 
 ;;; Exercise 19
 (define (string-insert s i)
   (if (and (string? s) (integer? i) (>= i 0) (<= i (string-length s)))
       (string-append (substring s 0 i) "_" (substring s i))  ; then
       "1st arg must be string and 2nd arg must be integer")) ; else
-(string-insert "Nicolas" 4)
-(string-insert "" 0)
+; (string-insert "Nicolas" 4)
+; (string-insert "" 0)
 
 ;;; Exercise 20
 (define (string-delete str i)
@@ -135,8 +135,8 @@
            (< i (string-length str)))
       (string-append (substring str 0 i) (substring str (add1 i)))    ; then
       "1st arg must be nonempty string and 2nd art must be integer")) ; else
-(string-delete "Nicolas" 4)
-(string-delete "" 0)
+; (string-delete "Nicolas" 4)
+; (string-delete "" 0)
 
 
 
@@ -184,13 +184,13 @@
    "Sincerely," "\n\n"
    signature-name "\n"))
 
-(letter "Bill" "McGillicuddy" "John")
-(letter "Matthew" "Fisler" "Felleisen")
-(letter "Kathi" "Felleisen" "Findler")
+; (letter "Bill" "McGillicuddy" "John")
+; (letter "Matthew" "Fisler" "Felleisen")
+; (letter "Kathi" "Felleisen" "Findler")
 
 ; (require 2htdp/bath-io) ; this adds `(write-file ...)` function
 
-(write-file 'stdout (letter "Matt" "Fiss" "Fell"))
+; (write-file 'stdout (letter "Matt" "Fiss" "Fell"))
 
 ; expected attendees
 (define (attendees ticket-price)
@@ -209,7 +209,7 @@
   (- (revenue ticket-price) (cost ticket-price)))
 
 ; (range 4.0 6.0 0.1)
-(map profit (range 1.00 5.50 0.1))
+; (map profit (range 1.00 5.50 0.1))
 
 
 ;;; Exercise 27
@@ -245,12 +245,12 @@
 
 
 ;;; Exercise 28
-(map profit-2 (range 1.00 5.50 1))
-(map profit-2 (range 2.50 3.50 0.10)) ; $2.90 maximizes profit
+; (map profit-2 (range 1.00 5.50 1))
+; (map profit-2 (range 2.50 3.50 0.10)) ; $2.90 maximizes profit
 
 
 ;;; Exercise 29
-(map profit-2 (range 2.50 3.50 0.10)) ; still, $2.90 maximizes profit
+; (map profit-2 (range 2.50 3.50 0.10)) ; still, $2.90 maximizes profit
 
 
 
@@ -300,7 +300,7 @@
 (define (profit-3 ticket-price)
   (- (revenue ticket-price) (cost ticket-price)))
 
-(map profit-3 (range 2.50 3.50 0.10))
+; (map profit-3 (range 2.50 3.50 0.10))
 
 
 
@@ -313,16 +313,16 @@
 
 ; (require 2htdp/batch-io) adds (read-file ...) and (write-file ...) functions
 
-(write-file "sample.dat" "212")
-(read-file "sample.dat")
+; (write-file "sample.dat" "212")
+; (read-file "sample.dat")
 
-(write-file 'stdout "212\n")
+; (write-file 'stdout "212\n")
 
 (define (C f)
   (* 5/9 (- f 32)))
-(C 32)
-(C 212)
-(C -40)
+; (C 32)
+; (C 212)
+; (C -40)
 
 (define (convert in out)
   (write-file out
@@ -332,6 +332,48 @@
                  (string->number
                   (read-file in))))
                "\n")))
+; (convert "sample.dat" 'stdout)
+; (convert "sample.dat" "sample_out.dat")
+; (read-file "sample_out.dat")
+
+
+;;; Exercise 31
+
+; (write-file 'stdout (letter "Matthew" "Fisler" "Felleisen"))
+
+(define (main in-fst in-lst in-signature out)
+  (write-file out
+              (letter (read-file in-fst)
+                      (read-file in-lst)
+                      (read-file in-signature))))
+; (main "first_name.dat" "last_name.dat" "signature_name.dat" "letter_out.dat")
+
+
+;;; Exercise 32
+; Most people no longer use desktop computers just to run applications but
+; also employ cell phones, tablets, and their cars’ information control screen.
+; Soon people will use wearable computers in the form of intelligent glasses,
+; clothes, and sports gear. In the somewhat more distant future, people may
+; come with built-in bio computers that directly interact with body functions.
+; Think of ten different forms of events that software applications on such
+; computers will have to deal with.
+; 1.  blood pressure measures
+; 2.  heart rate
+; 3.  eletrical brain activity
+; 4.  body fluid chemistry metrics
+; 5.  vaso-constriction metrics
+; 6.  body sweat
+; 7.  body temperature
+; 8.  respiration rate
+; 9.
+; 10.
+
+(define (number->square s)
+  (square s "solid" "red"))
+; (number->square 5)
+; (number->square 10)
+; (number->square 15)
+
 
 
 

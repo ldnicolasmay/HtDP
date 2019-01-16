@@ -6,6 +6,7 @@
 
 (require 2htdp/image)    ; teachpack
 (require 2htdp/batch-io) ; teachpack
+(require 2htdp/universe) ; teachpack
 
 
 
@@ -373,6 +374,48 @@
 ; (number->square 5)
 ; (number->square 10)
 ; (number->square 15)
+
+; (require 2htdp/universe)
+
+; (big-bang 100 [to-draw number->square])
+
+; (big-bang 100
+;   [to-draw number->square]
+;   [on-tick sub1]
+;   [stop-when zero?])
+
+(define (reset s ke) ; s = state; ke = key event (string)
+  100)
+; (define (reset s ke)
+;   (if (string=? ke " ") 50 100))
+
+; (big-bang 100
+;   [to-draw number->square] ; render fxn: (number->square s)
+;   [on-tick sub1]           ; tock fxn:   (sub1 s)
+;   [stop-when zero?]        ; end? fxn:   (zero? s)
+;   [on-key reset])          ; ke-h fxn:   (reset s ke)
+
+; (me-h (tock (ke-h cw0 "a")) "button-down" 90 100)
+
+; Place dot program
+(define BACKGROUND (empty-scene 100 100))
+(define DOT (circle 3 "solid" "red"))
+
+(define (main-2 y)
+  (big-bang y
+    [on-tick sub1]
+    [stop-when zero?]
+    [to-draw place-dot-at]
+    [on-key stop]))
+
+(define (place-dot-at y)
+  (place-image DOT 50 y BACKGROUND))
+
+(define (stop y ke)
+  0)
+
+
+
 
 
 

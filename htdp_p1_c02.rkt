@@ -152,6 +152,12 @@
 
 ;; 2.3 Composing Functions
 
+;;;;;
+;;
+;;  SLOGAN: DEFINE ONE FUNCTION PER TASK.
+;;
+;;;;;
+
 ; main function
 (define (letter fst lst signature-name)
   (string-append
@@ -219,7 +225,6 @@
 ; (define FLUX-COST 0.04)    ; Exer. 29 changed this
 (define FLUX-COST 1.50)      ;
 
-; expected attendees 2
 ; expected attendees
 (define (attendees-2 ticket-price)
   (- BASE-ATTENDEES
@@ -250,3 +255,85 @@
 
 
 ;; 2.4 Global Constants
+
+;;;;;
+;;
+;;  SLOGAN: FOR EVERY CONSTANT MENTIONED IN A PROBLEM STATEMENT,
+;;          INTRODUCE ONE CONSTANT DEFINITION.
+;;
+;;;;;
+
+; Constant definitions -- ALL CAPS by convention
+(define CURRENT-PRICE 5) ; 5 is the "right hand side", here a literal constant
+(define ALMOST-PI 3.14)  ; literal constant
+(define NL "\n")         ; literal constant
+(define MT (empty-scene 100 100)) ; RHS is an expression
+
+; Constant defn.s, RHS literal constants and expressions
+(define WIDTH 100)
+(define HEIGHT 200)
+(define MID-WIDTH (/ WIDTH 2))
+(define MID-HEIGHT (/ HEIGHT 2))
+
+
+;;; Exercise 30
+
+; constant definitions
+(define PRICE-SENSITIVITY-OF-ATTENDANCE
+  (* ATTENDEE-CHANGE TIX-PRICE-CHANGE))
+
+; expected attendees
+(define (attendees-3 ticket-price)
+  (- BASE-ATTENDEES
+     (* (- ticket-price BASE-TIX-PRICE)
+        PRICE-SENSITIVITY-OF-ATTENDANCE)))
+
+; revenue (money earned)
+(define (revenue-3 ticket-price)
+  (* ticket-price (attendees ticket-price)))
+
+; cost (money spent)
+(define (cost-3 ticket-price)
+  (+ FIXED-COST (* FLUX-COST (attendees ticket-price))))
+
+; profit (revenue - cost)
+(define (profit-3 ticket-price)
+  (- (revenue ticket-price) (cost ticket-price)))
+
+(map profit-3 (range 2.50 3.50 0.10))
+
+
+
+;; 2.5 Programs
+
+; Two distinct kinds of programs:
+;   1. batch program - consumes all it's inputs at once and computes its result
+;   2. interactive program - consumes some of its inputs, computes, produces
+;      some output, consumes more input, and so on.
+
+; (require 2htdp/batch-io) adds (read-file ...) and (write-file ...) functions
+
+(write-file "sample.dat" "212")
+(read-file "sample.dat")
+
+(write-file 'stdout "212\n")
+
+(define (C f)
+  (* 5/9 (- f 32)))
+(C 32)
+(C 212)
+(C -40)
+
+(define (convert in out)
+  (write-file out
+              (string-append
+               (number->string
+                (C
+                 (string->number
+                  (read-file in))))
+               "\n")))
+
+
+
+
+

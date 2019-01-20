@@ -34,6 +34,50 @@
 
 ;;; Exercise 30
 
+; expected attendees
+(define (attendees ticket-price)
+  (- 120 (* (- ticket-price 5.0) (/ 15 0.1))))
+
+; revenue (money earned)
+(define (revenue ticket-price)
+  (* ticket-price (attendees ticket-price)))
+
+; cost (money spent)
+(define (cost ticket-price)
+  (+ 180 (* 0.04 (attendees ticket-price))))
+
+; profit (revenue - cost)
+(define (profit ticket-price)
+  (- (revenue ticket-price) (cost ticket-price)))
+
+; constant definitions
+(define BASE-ATTENDEES 120)
+(define BASE-TIX-PRICE 5.00)
+(define ATTENDEE-CHANGE 15)
+(define TIX-PRICE-CHANGE 0.10)
+; (define FIXED-COST 180.00) ; Exer. 29 changed this
+(define FIXED-COST 0.00)     ;
+; (define FLUX-COST 0.04)    ; Exer. 29 changed this
+(define FLUX-COST 1.50)
+
+; expected attendees
+(define (attendees-2 ticket-price)
+  (- BASE-ATTENDEES
+     (* (- ticket-price BASE-TIX-PRICE)
+        (/ ATTENDEE-CHANGE TIX-PRICE-CHANGE))))
+
+; revenue (money earned)
+(define (revenue-2 ticket-price)
+  (* ticket-price (attendees ticket-price)))
+
+; cost (money spent)
+(define (cost-2 ticket-price)
+  (+ FIXED-COST (* FLUX-COST (attendees ticket-price))))
+
+; profit (revenue - cost)
+(define (profit-2 ticket-price)
+  (- (revenue ticket-price) (cost ticket-price)))
+
 ; constant definitions
 (define PRICE-SENSITIVITY-OF-ATTENDANCE
   (* ATTENDEE-CHANGE TIX-PRICE-CHANGE))

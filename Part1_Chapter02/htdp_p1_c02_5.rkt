@@ -24,6 +24,36 @@
 
 ; (write-file 'stdout "212\n")
 
+; main function
+(define (letter fst lst signature-name)
+  (string-append
+   (opening fst)
+   "\n\n"
+   (body fst lst)
+   "\n\n"
+   (closing signature-name)))
+
+; helper function 1
+(define (opening fst)
+  (string-append "Dear " fst ","))
+
+; helper function 2
+(define (body fst lst)
+  (string-append
+   "We have discovered that all people with the" "\n"
+   "last name " lst " have won our lottery. So, " "\n"
+   fst ", hurry and pick up your prize."))
+
+; helper function 3
+(define (closing signature-name)
+  (string-append
+   "Sincerely," "\n\n"
+   signature-name "\n"))
+
+; (letter "Bill" "McGillicuddy" "John")
+; (letter "Matthew" "Fisler" "Felleisen")
+; (letter "Kathi" "Felleisen" "Findler")
+
 (define (C f)
   (* 5/9 (- f 32)))
 ; (C 32)
@@ -99,6 +129,12 @@
 ;   [on-tick sub1]           ; tock fxn:   (sub1 s)
 ;   [stop-when zero?]        ; end? fxn:   (zero? s)
 ;   [on-key reset])          ; ke-h fxn:   (reset s ke)
+(define (main-2 y)
+  (big-bang y
+    [to-draw number->square]
+    [on-tick sub1]
+    [stop-when zero?]
+    [on-key reset]))
 
 ; (me-h (tock (ke-h cw0 "a")) "button-down" 90 100)
 
@@ -106,7 +142,7 @@
 (define BACKGROUND (empty-scene 100 100))
 (define DOT (circle 3 "solid" "red"))
 
-(define (main-2 y)
+(define (main-3 y)
   (big-bang y
     [on-tick sub1]
     [stop-when zero?]
@@ -119,11 +155,25 @@
 (define (stop y ke)
   0)
 
+; Practice 2htdp/universe + big-bang with a simple program that renders
+; the letter of the key pressed.
 
+(define BACKGROUND-WIDE (empty-scene 300 100))
 
+(define (draw-letter ke)
+  (place-image (text ke 72 "red") 150 55 BACKGROUND-WIDE))
 
+(define (Q? ke)
+  (string=? "Q" ke))
 
+(define (change-letter cw ke) ; cw = current world state; ke = key event (String)
+  ke)
 
+(define (main-4 ke)
+  (big-bang ke
+    [on-key change-letter]
+    [to-draw draw-letter]
+    [stop-when Q?]))
 
-
+; (main-4 "a")
 

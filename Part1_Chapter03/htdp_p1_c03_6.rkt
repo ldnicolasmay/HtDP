@@ -54,22 +54,7 @@
 ; ======================================================
 ; Define needed constants
 (define BACKGROUND (empty-scene 500 50))
-(define WHEEL-RADIUS 10)
-(define CAR-BODY
-  (overlay/offset 
-    (rectangle (* WHEEL-RADIUS 8) (* WHEEL-RADIUS 2) "solid" "red")
-    0 (* WHEEL-RADIUS -1.5)
-    (rectangle (* WHEEL-RADIUS 4) WHEEL-RADIUS "solid" "red")))
-(define CAR-WHEELS
-  (overlay/offset (circle WHEEL-RADIUS "solid" "black")
-                  (* WHEEL-RADIUS 4) 0
-                  (circle WHEEL-RADIUS "solid" "black")))
-(define CAR
-  (overlay/offset
-    CAR-WHEELS
-    0 (* WHEEL-RADIUS -1.5)
-    CAR-BODY))
-
+(define CAR (rectangle 40 15 "solid" "red"))
 ; (place-image CAR 25 35 BACKGROUND)
 ; (place-image CAR 475 35 BACKGROUND)
 
@@ -203,8 +188,246 @@
 ;    > (main 13)
 ;
 ;    ... which will launch the program with the CAR's center 13 pixels to the
-;    right of the `big-bang`'s window. 
-;
-;
+;    right of the left margin.
+
+
 ;;; Exercise 39
-    
+
+(define WHEEL-RADIUS 10)
+(define CAR-BODY
+  (overlay/offset 
+    (rectangle (* WHEEL-RADIUS 8) (* WHEEL-RADIUS 2) "solid" "red")
+    0 (* WHEEL-RADIUS -1.5)
+    (rectangle (* WHEEL-RADIUS 4) WHEEL-RADIUS "solid" "red")))
+(define CAR-WHEELS
+  (overlay/offset (circle WHEEL-RADIUS "solid" "black")
+                  (* WHEEL-RADIUS 4) 0
+                  (circle WHEEL-RADIUS "solid" "black")))
+(define CAR-2
+  (overlay/offset
+    CAR-WHEELS
+    0 (* WHEEL-RADIUS -1.5)
+    CAR-BODY))
+
+
+; Now let's design the clock tick handling function.
+
+; WorldState -> WorldState
+; moves the car by 3 pixels for every clock tick
+; (define (tock ws) ws)
+
+; The above becomes...
+
+; WorldState -> WorldState
+; moves the car by 3 pixels for every clock tick
+; examples:
+;   given: 20, expect: 23
+;   given: 78, expect: 81
+; (define (tock ws)
+;   (+ ws 3))
+
+;;; Exercise 40
+; With Exercise 40, the above becomes...
+
+; WorldState -> WorldState
+; moves the car by 3 pixels for every clock tick
+; (check-expect (tock -10) -7)
+; (check-expect (tock 0) 3)
+; (check-expect (tock 10) 13)
+; (define (tock ws)
+;   (+ ws 3))
+
+
+; The next entry on the function wish list translate the World State into an
+; image.
+
+; WorldState -> Image
+; places the car into the BACKGROUND scene,
+;   according to the given world state
+; (define (render ws)
+;   BACKGROUND)
+
+; At this point it's often useful to sketch out the graphics that will be
+; displayed as the world state changes from event to event. (See Figure 19.)
+
+; For each sketch, it's useful to write down expressions that would draw the
+; pictures sketched in the step above. The examples given in Figure 19 are...
+;
+; ws  | expression
+; ----|---------------------------------------
+;  50 | (place-image CAR 50 Y-CAR BACKGROUND)
+; 100 | (place-image CAR 100 Y-CAR BACKGROUND)
+; 150 | (place-image CAR 150 Y-CAR BACKGROUND)
+; 200 | (place-image CAR 200 Y-CAR BACKGROUND)
+
+; ("Y-CAR" is the car's y position.)
+
+; The info from this table is used to update the function we're designing.
+
+; WorldState -> Image
+; places the car into the BACKGROUND scene,
+;   according to the given world state
+; (define (render ws)
+;   (place-image CAR ws Y-CAR BACKGROUND))
+
+; And that's mostly all there is to designing a simple world program.
+
+
+;;; Exercise 41
+; Finish the sample problem and get the program to run.
+
+(define TREE
+  (underlay/xy (circle 10 "solid" "green")
+               9 15
+               (rectangle 2 20 "solid" "brown")))
+(define BACKGROUND-2 (place-image TREE 350 25 (empty-scene 500 100)))
+(define Y-CAR (/ (image-height BACKGROUND-2) 2))
+
+; Wish List:
+;   * clock tick handler fxn
+;   * render fxn
+;   * end? fxn
+
+; clock tick handler fxn
+; WorldState -> WorldState
+; moves the car 3 pixels right for every clock tick
+(check-expect (tock -10) -7)
+(check-expect (tock 0) 3)
+(check-expect (tock 10) 13)
+(define (tock ws)
+  (+ ws 3))
+
+; render fxn
+; WorldState -> Image
+; places the car on the BACKGROUND scene,
+;   according to the given world state
+(check-expect (render 50) (place-image CAR-2 50 Y-CAR BACKGROUND-2))
+(check-expect (render 100) (place-image CAR-2 100 Y-CAR BACKGROUND-2))
+(check-expect (render 200) (place-image CAR-2 200 Y-CAR BACKGROUND-2))
+(define (render ws)
+  (place-image CAR-2 ws Y-CAR BACKGROUND-2))
+
+; end fxn
+; WorldState -> Boolean
+; stops the program when the car has left the background
+; given: 0, expect: #false
+; given: 550; expect: #true
+(check-expect (car-gone? 0) #false)
+(check-expect (car-gone? (+ 500 (/ (image-width CAR-2) 2))) #true)
+(define (car-gone? ws)
+  (>= ws (+ 500 (/ (image-width CAR-2) 2))))
+
+(define (main-2 ws)
+  (big-bang ws
+    [on-tick tock]
+    [to-draw render]
+    [stop-when car-gone?]))
+
+
+;;; Exercise 42 --- SKIPPING ---
+
+;;; Exercise 43
+
+; An AnimationState is a Number.
+; interpretation: the number of clock ticks since the animation started
+
+; Wish list:
+;   * clock tick handler fxn
+;   * render fxn
+;   * end? fxn
+
+(define VELOCITY 3)
+
+; clock tick handler fxn
+; AnimationState -> AnimationState
+; speeds up or slows down time by applying a fxn to every clock tick
+; given: 50, expect: 51
+; given: 100, expect: 101
+(define (tock-2 as)
+  (add1 as))
+
+; render fxn
+; AnimationState -> Image
+; places the car on the BACKGROUND following a sine wave,
+;   according to the given animation state
+(define (render-2 as)
+  (place-image CAR-2
+               (* as VELOCITY)                  ; distance = as * VELOCITY
+               (+ Y-CAR (* 10 (sin (/ as 10)))) ; y = f(distance)
+               BACKGROUND-2))
+
+; end? fxn
+; AnimationState -> Boolean
+; stops the program when the car has left the background --
+; which is when CAR-2 distance >= BACKGROUND-2 witdth + half the car length
+(check-expect (car-gone?-2 0) #false)
+(check-expect (car-gone?-2 (+ 500 (/ (image-width CAR-2) 2))) #true)
+(define (car-gone?-2 as)
+  (>= (* as VELOCITY)
+      (+ 500 (/ (image-width CAR-2) 2))
+      ))
+
+(define (main-3 as)
+  (big-bang as
+    [on-tick tock-2]
+    [to-draw render-2]
+    [stop-when car-gone?-2]))
+
+
+; Now we're going to add some mouse functionality. If the mouse is clicked
+; anywhere on the canvas, the car is placed at at the x-coordinate of that
+; click.
+
+; This is just a modification of the original problem. Here's what we need to
+; consider:
+;
+; 1. There are no new properties, so we don't have to add any new constants.
+; 2. The program is still concerned with just one property that changes over
+;    time, viz. the x-coordinate of the car. So, the data representation we
+;    have in place will do. No need to change the data model.
+; 3. The revised problem calls for a mouse-event handler, but it doesn't
+;    give up the clock-based movement of the car. So, we need to add a
+;    mouse event handler to our fxn wishlist:
+;
+;    ; WorldState Number Number String -> WorldState
+;    ; place the car at x-mouse, if the given `me` is "button-down"
+;    (define (hyperspace x-position-of-car x-mouse y-mouse me)
+;      x-position-of-car)
+;
+; 4. Lastly, we need to modify `main` to take care of the mouse events. This
+;    only requires the addition of an `on-mouse` clause that defers to the
+;    new entry on our wish list:
+;
+;    (define (main ws)
+;      (big-bang ws
+;        [on-tick tock]
+;        [on-mouse hyper]
+;        [to-draw render]))
+
+; For the mouse event handler fxn, we have the signature, purpose, and
+; function header. Now we need to develop some functional examples:
+;
+; WorldState Number Number String -> WorldState
+; place the car at x-mouse, if the given `me` is "button-down"
+; given: 21 10 20 "enter", want: 21
+; given: 42 10 20 "button-down", want: 10
+; given: 42 10 20 "move", want: 42
+(check-expect (hyperspace 21 10 20 "enter") 21)
+(check-expect (hyperspace 42 10 20 "button-down") 10)
+(check-expect (hyperspace 42 10 20 "move") 42)
+; (define (hyperspace x-position-of-car x-mouse y-mouse me)
+;   x-position-of-car) ; this isn't good enough... we need conditionals
+(define (hyperspace x-position-of-car x-mouse y-mouse me)
+  (cond
+    [(string=? me "button-down") x-mouse]
+    [else x-position-of-car]))
+
+(define (main-4 ws)
+  (big-bang ws
+    [on-tick tock]
+    [on-mouse hyperspace]
+    [to-draw render]))
+
+
+
+

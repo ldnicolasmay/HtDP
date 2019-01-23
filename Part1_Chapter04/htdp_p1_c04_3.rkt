@@ -289,7 +289,7 @@
     [(string=? "right" k) (+ p 5)]
     [else p]))
 
-; but here's a simpler/better evolution of the first fxn def.n
+; but here's a simpler/better evolution of the first fxn def.n just above
 (define (keh-2 p k)
   (cond
     [(string=? "left"  k) (- p 5)]

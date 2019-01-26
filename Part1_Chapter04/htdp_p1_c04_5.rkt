@@ -74,13 +74,21 @@
 ; render fxn
 ; LaunchingRocket -> Image
 ; places the ROCKET at given height in the middle of MTSCN
-(check-expect (render "resting") (place-image ROCKET X-ROCKET HEIGHT MTSCN))
+(check-expect (render "resting") (place-image ROCKET
+                                              X-ROCKET HEIGHT
+                                              MTSCN))
 (check-expect (render (- HEIGHT Y-DELTA))
-              (place-image ROCKET X-ROCKET (- HEIGHT Y-DELTA) MTSCN))
-(check-expect (render 0) (place-image ROCKET X-ROCKET 0 MTSCN))
+              (place-image ROCKET
+                           X-ROCKET (- HEIGHT Y-DELTA)
+                           MTSCN))
+(check-expect (render 0) (place-image
+                          ROCKET X-ROCKET 0
+                          MTSCN))
 (define (render lr)
   (cond
-    [(and (string? lr) (string=? lr "resting")) (place-image ROCKET X-ROCKET HEIGHT MTSCN)]
+    [(and (string? lr) (string=? lr "resting")) (place-image ROCKET
+                                                             X-ROCKET HEIGHT
+                                                             MTSCN)]
     [(number? lr) (place-image ROCKET X-ROCKET lr MTSCN)]))
 
 
@@ -152,26 +160,22 @@
 (check-expect (show -2)
               (place-image (text "-2" 20 "red")
                            10 (* 3/4 WIDTH-2)
-                           (place-image ROCKET-2 10 (- HEIGHT-2 CENTER-2) BACKG-2)))
+                           (place-image ROCKET-2
+                                        10 (- HEIGHT-2 CENTER-2)
+                                        BACKG-2)))
 (check-expect (show 53)
               (place-image ROCKET-2 10 (- 53 CENTER-2) BACKG-2))
 (check-expect (show 0)
               (place-image ROCKET-2 10 (- 0 CENTER-2) BACKG-2))
 (define (show x)
   (cond
-    ;[(and (string? x) (string=? x "resting")) ; apparently overkill
     [(string? x)
-     ; (place-image ROCKET-2 10 (- HEIGHT-2 CENTER-2) BACKG-2)] ; shortened in Ex. 55
      (rocket-on-bg HEIGHT-2)]
-    ;[(and (number? x) (<= -3 x -1))            ; apparently overkill
     [(<= -3 x -1)
      (place-image (text (number->string x) 20 "red")
                   10 (* 3/4 WIDTH-2)
-                  ; (place-image ROCKET-2 10 (- HEIGHT-2 CENTER-2) BACKG-2))] ; shortened in Ex. 55
                   (rocket-on-bg HEIGHT-2))]
-    ;[(and (number? x) (>= x 0))               ; apparently overkill
     [(<= 0 x)
-     ;(place-image ROCKET-2 10 (- x CENTER-2) BACKG-2)])) ; shortened in Ex. 55
      (rocket-on-bg x)]))
 
 ;;; Exercise 55
@@ -220,12 +224,14 @@
 (check-expect (end? -3) #false)
 (check-expect (end? HEIGHT) #false)
 (check-expect (end? 50) #false)
-(check-expect (end? (- 0 CENTER-2)) #true)
+(check-expect (end? 0) #true)
 (define (end? x)
   (cond
     [(string? x) #false]
-    [(> x -10) #false]
-    [else #true]))
+    [(<= -3 x -1) #false]
+    [(<= 1 x HEIGHT) #false]
+    [else #true]
+    ))
 
 ; LRCD -> LRCD
 (define (main-2 s)
@@ -236,6 +242,9 @@
     [on-tick fly]
     ))
 
+
+;;; Exercise 57 -- skipping --
+; This is just addition/subtration on the Y coordinate
 
 ;##@    #==--  :  --==#    @##==---==##@##==---==##@    #==--  :  --==#    @##;
 ;==##@    #==-- --==#    @##==---==##@   @##==---==##@    #==-- --==#    @##==;

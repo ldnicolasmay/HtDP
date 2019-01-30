@@ -81,10 +81,10 @@
   (place-image on-light light-x 15 LIGHTS-OFF-SCN))
 
 ; -- Main Fxn --
-(define (traffic-light-simulation initial-state)
-  (big-bang initial-state
-    [to-draw tl-render]
-    [on-tick tl-next 1]))
+;(define (traffic-light-simulation initial-state)
+;  (big-bang initial-state
+;    [to-draw tl-render]
+;    [on-tick tl-next 1]))
 
 
 ;;; Exercise 60
@@ -123,6 +123,81 @@
 ; - RED
 ; - GREEN
 ; - YELLOW
+
+; Here's another finite state problem that introduces a few additional
+; complications:
+
+; Sample Problem
+; Design a world program that simulates the working of a door with an
+; automatic door closer. If this kind of door is locked, you can unlock it
+; with a key. An unlocked door is closed, but someone pushing at the door
+; opens it. Once the person has passed through the door and lets go, the
+; automatic door takes over and closes the door again. When the door is
+; closed, it can be locked again.
+
+; A DoorState is one of:
+; - LOCKED
+; - CLOSED
+; - OPEN
+
+(define LOCKED "locked")
+(define CLOSED "closed")
+(define OPEN "open")
+
+; Wish list of `big-bang` functions
+
+; DoorState -> DoorState
+; closes an open door over the period of one clock tick
+; given state | desired state
+; ------------|--------------
+; LOCKED      | LOCKED
+; CLOSED      | CLOSED
+; OPEN        | CLOSED
+(check-expect (door-closer LOCKED) LOCKED)
+(check-expect (door-closer CLOSED) CLOSED)
+(check-expect (door-closer OPEN)   CLOSED)
+(define (door-closer state-of-door)
+  (cond
+    [(string=? LOCKED state-of-door) LOCKED]
+    [(string=? CLOSED state-of-door) CLOSED]
+    [(string=? OPEN   state-of-door) CLOSED]))
+
+; DoorState KeyEvent -> DoorState
+; turns key event k into an action on state s
+; given state | given key event | desired state
+; ------------|-----------------|--------------
+; LOCKED      | "u"             | CLOSED
+; LOCKED      | [any key but u] | LOCKED
+; CLOSED      | "l"             | LOCKED
+; CLOSED      | " "             | OPEN
+; CLOSED      | [any but l,' '] | CLOSED
+; OPEN        | [any key]       | OPEN
+(check-expect (door-action LOCKED "u") CLOSED) ; change
+(check-expect (door-action LOCKED "a") LOCKED)
+(check-expect (door-action CLOSED "l") LOCKED) ; change
+(check-expect (door-action CLOSED " ") OPEN)   ; change
+(check-expect (door-action CLOSED "a") CLOSED)
+(check-expect (door-action OPEN   "a") OPEN)
+(define (door-action s k)
+  (cond
+    [(and (string=? LOCKED s) (string=? "u" k)) CLOSED]
+    [(and (string=? CLOSED s) (string=? "l" k)) LOCKED]
+    [(and (string=? CLOSED s) (string=? " " k)) OPEN  ]
+    [else s]))
+
+; DoorState -> Image
+; translates the current door state s into a large text image
+(check-expect (door-render CLOSED) (text CLOSED 40 "red"))
+(define (door-render s)
+  (text s 40 "red"))
+
+; Main fxn
+(define (door-simulation initial-state)
+  (big-bang initial-state
+    [on-tick door-closer 3]
+    [on-key  door-action]
+    [to-draw door-render]))
+
 
 
 

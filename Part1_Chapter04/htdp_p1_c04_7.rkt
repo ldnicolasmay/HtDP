@@ -118,7 +118,7 @@
 (define GREEN 1)
 (define YELLOW 2)
 
-; -- Data Definition -- 
+; -- Data Definition --
 ; An S-TrafficLight is one of      ... ... ... ("S-" for "symbolic")
 ; - RED
 ; - GREEN

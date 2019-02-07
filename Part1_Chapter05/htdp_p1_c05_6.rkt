@@ -89,11 +89,11 @@
 ; A Posn represents the state of the world.
 
 ; Posn -> Posn
-;(define (main p0)
-;  (big-bang p0
-;    [on-tick x+]
-;    [on-mouse reset-dot]
-;    [to-draw scene+dot]))
+(define (main p0)
+  (big-bang p0
+    [on-tick x+]
+    [on-mouse reset-dot]
+    [to-draw scene+dot]))
 
 ; Your task is to design `scene+dot`, the function that adds a red dot to the
 ; empty canvas at the specified position.
@@ -122,6 +122,8 @@
 (define (scene+dot p)
   (place-image DOT (posn-x p) (posn-y p) MTS))
 
+; A function can produce structures (among other things).
+
 ; Sample Problem (cont.)
 ; A colleague is asked to define `x+`, a function that consumes a Posn and
 ; increases the x-coordinate by 3.
@@ -149,6 +151,52 @@
 ;  (... n ... (posn-y p) ...))
 (define (posn-up-x p n)
   (make-posn n (posn-y p)))
+
+; A function can also produce instance of atomic data.
+
+; Sample Problem
+; Another colleague is tasked to design `reset-dot`, a function that resets
+; the dot when the mouse is clicked.
+
+; Recall that mouse event handlers consume four values:
+; 1. the current state of the world
+; 2. the mouse pointer x coordinate
+; 3. the mouse pointer y coordinate
+; 4. a MouseEvent
+
+; By adding the knowledge from the sample problem to the program design
+; recipe, we get a signature, a purpose statement, and a header.
+
+; Posn Number Number MouseEvt -> Posn
+; for mouse clicks, (make-posn x y); otherwise p
+;(define (reset-dot p x y me) p)
+
+(check-expect
+ (reset-dot (make-posn 10 20) 29 31 "button-down")
+ (make-posn 29 31))
+(check-expect
+ (reset-dot (make-posn 10 20) 29 31 "button-up")
+ (make-posn 10 20))
+
+; The purpose statement and examples suggest a differentiation between two
+; kinds of MouseEvts: "buttow-down" and all others. Hence, a `cond`
+; expression.
+
+;(define (reset-dot p x y me)
+;  (cond
+;    [(mouse=? "button-down" me) (... p ... x y ...)]
+;    [else (... p ... x y ...)]))
+
+(define (reset-dot p x y me)
+  (cond
+    [(mouse=? "button-down" me) (make-posn x y)]
+    [else p]))
+
+;;; Exercise 74
+; Copy all relevant constant and function definitions to DrRacket’s
+; definitions area. Add the tests and make sure they pass. Then run the
+; program and use the mouse to place the red dot.
+
 
 
 

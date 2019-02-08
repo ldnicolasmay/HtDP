@@ -196,8 +196,79 @@
 ; Copy all relevant constant and function definitions to DrRacket’s
 ; definitions area. Add the tests and make sure they pass. Then run the
 ; program and use the mouse to place the red dot.
+; (All done above. Run `(main (make-posn 0 10))` to run.)
 
 
+; May programs deal with nested structures. We illustrate this point with
+; another small excerpt from a world program.
+
+; Sample Problem
+; Your team is designing a game program that keeps track of an object that
+; moves across the canvas at changing speed. The chosen data representation
+; requires two data definitions:
+
+(define-struct ufo [loc vel])
+; A UFO is a structure:
+;   (make-ufo Posn Vel)
+; interpretation: (make-ufo p v) is at location p moving at velocity v
+
+; The fxn `ufo-move-1` needs to be developed. The fxn computes the location
+; of a given UFO after one click tick passes.
+
+(define v1 (make-vel 8 -3))
+(define v2 (make-vel -5 -3))
+
+(define p1 (make-posn 22 80))
+(define p2 (make-posn 30 77))
+
+(define u1 (make-ufo p1 v1))
+(define u2 (make-ufo p1 v2))
+(define u3 (make-ufo p2 v1))
+(define u4 (make-ufo p2 v2))
+
+; Now we'll write a signature, purpose, some examples, and a function header.
+
+; UFO -> UFO
+; determines where u moves in one clock tick;
+; leaves the velocity as is
+(check-expect (ufo-move-1 u1) u3)
+(check-expect (ufo-move-1 u2) (make-ufo (make-posn 17 77) v2))
+; (define (ufo-move-1 u) u)
+
+;; my own attempt before guidance
+;(define (ufo-move-1 u)
+;  ; get the ufo posn-x (posn-x (ufo-loc u))
+;  ; get the ufo posn-y (posn-y (ufo-loc u))
+;  ; get the ufo vel-deltax (vel-deltax (ufo-vel u))
+;  ; get the ufo vel-deltay (vel-deltay (ufo-vel u))
+;  (make-ufo (make-posn (+ (posn-x (ufo-loc u)) (vel-deltax (ufo-vel u))) ; loc
+;                       (+ (posn-y (ufo-loc u)) (vel-deltay (ufo-vel u)))) 
+;            (ufo-vel u))) ; vel
+
+; Now we need to figure out how to combine the Posn and Vel inside the UFO
+; to obtain the next location of the UFO. Let's create a function for adding
+; a Vel to a Posn.
+
+; Posn Vel -> Posn
+; adds v to p
+(check-expect (posn+ p1 v1) p2)
+(check-expect (posn+ p1 v2) (make-posn 17 77))
+(define (posn+ p v)
+  (make-posn (+ (posn-x p) (vel-deltax v))
+             (+ (posn-y p) (vel-deltay v))))
+
+; With this little helper function, we can now simplify `ufo-move-1`.
+
+(define (ufo-move-1 u)
+  (make-ufo (posn+ (ufo-loc u) (ufo-vel u))
+            (ufo-vel u)))
+
+;;; Exercise 75
+; Enter these definitions and their test cases into the definitions area of
+; DrRacket and make sure they work. This is the first time that you have
+; dealt with a “wish,” and you need to make sure you understand how the two
+; functions work together.
+; (This is done above.)
 
 
 ;##@    #==--  :  --==#    @##==---==##@##==---==##@    #==--  :  --==#    @##;
